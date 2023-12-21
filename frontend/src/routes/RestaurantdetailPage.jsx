@@ -1,43 +1,40 @@
-import React, { useContext, useEffect, useState} from 'react'
-import { useParams } from 'react-router-dom'
-import { RestaurantsContext } from '../context/RestaurantsContext'
-import RestaurantFinder from '../apis/RestaurantFinder'
-// import StarRating from '../components/StarRating'
+import React, { useContext, useEffect } from 'react';
+import { useParams} from 'react-router-dom';
+import { RestaurantsContext } from '../context/RestaurantsContext';
+import RestaurantFinder from '../apis/RestaurantFinder';
 
-const RestaurantdetailPage = () => {
-  const{id} = useParams()
-  const{selectedRestaurant,setSelectedRestaurant} = useContext(RestaurantsContext)
+const RestaurantDetailPage = () => {
+  const { id } = useParams();
+  const { selectedRestaurant, setSelectedRestaurant } = useContext(RestaurantsContext);
 
-  useEffect(()=> {
-    const fetchData = async () =>{
-      try{
-        const response = await RestaurantFinder.get(`/${id}`)
-        console.log(response.data)
-        setSelectedRestaurant(response.data)
-      }catch(err){
-        console.error('Error fetching data:', err)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+          const response = await RestaurantFinder.get(`/${id}`);
+          console.log('API response:', response.data);
+          setSelectedRestaurant(response.data);
+    
+      } catch (error) {
+        console.error('Error fetching data:', error.response?.data || error.message);
+        // Handle the error or set an appropriate state to indicate the error
       }
+    };
 
-    }
-    fetchData()
-  }, [id, setSelectedRestaurant])
+    fetchData();
+  }, [id, setSelectedRestaurant]);
 
-  console.log('Selected Restaurant:', selectedRestaurant)
-  return (<div>
-            {selectedRestaurant && (
-              <>
-              <h1 className='text-center display-1'>
-              {selectedRestaurant.name})
-              </h1>
-              {/* <div className="text-center">
-                <StarRating rating= {2.3}></StarRating>
-              </div> */}
-              </>
-            )}
-          </div>
+  return (
+    <div>
+      {selectedRestaurant && (
+        <>
+          <h1 className="text-center display-1">
+            {selectedRestaurant.name}
+          </h1>
+          {/* Other details can be displayed here */}
+        </>
+      )}
+    </div>
+  );
+};
 
-  )
-
-}
-
-export default RestaurantdetailPage
+export default RestaurantDetailPage;

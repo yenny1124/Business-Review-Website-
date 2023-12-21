@@ -29,7 +29,8 @@ const RestaurantList = (props) => {
         }
       };
 
-  const handleUpdate = (id) =>{
+  const handleUpdate = (e, id) =>{
+    e.stopPropagation() 
     navigate(`/restaurants/${id}/update`)
 
   }
@@ -57,13 +58,13 @@ const RestaurantList = (props) => {
                     return(
                         <tr 
                             onClick={()=> handleRestaurantSelect(restaurant._id)} 
-                            key={restaurant._id}
+                            key={restaurant._id} 
                         >
                         <td>{restaurant.name}</td>
                         <td>{restaurant.location}</td>
                         <td>{"$".repeat(restaurant.price_range)}</td>
                         <td>reviews</td>
-                        <td><button onClick ={() => handleUpdate(restaurant._id)}className="btn btn-warning">Update</button></td>
+                        <td><button onClick ={(e) => handleUpdate(e, restaurant._id)}className="btn btn-warning">Update</button></td>
                         <td><button onClick={(e) => handleDelete(e, restaurant._id)}className='btn btn-danger'>Delete</button></td>
                     </tr>
                     )

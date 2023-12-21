@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect} from "react";
-import { useParams, useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import RestaurantFinder from "../apis/RestaurantFinder";
 
 const UpdateRestaurant = (props) => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   const {restaurants} = useContext(RestaurantsContext);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
@@ -21,7 +21,7 @@ const UpdateRestaurant = (props) => {
         setPriceRange(response.data.price_range);
       } catch (error) {
         console.error('Error fetching restaurant:', error);
-      }
+      } 
     };
 
     fetchData();
@@ -35,11 +35,12 @@ const UpdateRestaurant = (props) => {
         location,
         price_range: priceRange,
       });
-      navigate('/'); // Use navigate instead of history.push
+      // Use navigate with the immediate option
+      navigate('/');
 
     } catch (error) {
       console.error('Error updating restaurant:', error);
-    }
+    } 
   };
 
   return (

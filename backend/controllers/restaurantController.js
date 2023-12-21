@@ -24,7 +24,7 @@ const getRestaurant = asyncHandler(async(req, res) => { // access db
         // const reviews = await Reviews.findBy(restaurant._id)
 
         // console.log(reviews)
-        req.status(200).json(restaurant)
+        res.status(200).json(restaurant)
  
     }catch(error){
         res.status(500)

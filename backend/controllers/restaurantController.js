@@ -84,43 +84,53 @@ const deleteRestaurant = asyncHandler(async(req, res) => { // access db
     }
 })
 
-// Get reviews for a specific restaurant
 const getReviews = asyncHandler(async (req, res) => {
- try {
-    const { id } = req.params;
-    const restaurant = await Restaurant.findById(id).populate('reviews');
-    if (!restaurant) {
-        res.status(404);
-        throw new Error(`Cannot find any restaurant with ID ${id}`);
-    }
-        res.status(200).json(restaurant);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-})
-
-// Add a review to a specific restaurant
-const addReview = asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, review, rating} = req.body;
-      
-      // Ensure the restaurant exists
-      const restaurant = await Restaurant.findById(id);
+  
+      const restaurant = await Restaurant.findById(id).populate('reviews');
+  
       if (!restaurant) {
         res.status(404);
         throw new Error(`Cannot find any restaurant with ID ${id}`);
       }
   
-     // Create a new review and associate it with the restaurant
-     const newReview = new Review({ name, review, rating, restaurant: id });
-     await newReview.save();
+      console.log('Restaurant with Reviews:', restaurant);
+  
+      const reviews = restaurant.reviews || [];
+      res.status(200).json(reviews);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
 
-     res.status(201).json(newReview);
-   } catch (error) {
-     res.status(500).json({ error: error.message });
-   }
-})
+// Add a review to a specific restaurant
+const addReview = async (req, res) => {
+    try {
+      const { id } = req.params; // Restaurant ID
+      const { name, review, rating } = req.body;
+  
+      // Ensure the restaurant exists
+      const restaurant = await Restaurant.findById(id);
+      if (!restaurant) {
+        res.status(404).json({ error: `Cannot find any restaurant with ID ${id}` });
+        return;
+      }
+  
+      // Create a new review and associate it with the restaurant
+      const newReview = new Review({ name, review, rating, restaurant: id });
+      await newReview.save();
+  
+      // Add the new review's ID to the restaurant's reviews array
+      restaurant.reviews.push(newReview._id);
+      await restaurant.save();
+  
+      res.status(201).json(newReview);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 // Delete a review
 const deleteReview = asyncHandler(async (req, res) => {

@@ -29,12 +29,12 @@ router.put('/:id', updateRestaurant);
 router.delete('/:id', deleteRestaurant);
   
 // get reviews for a specific restaurant
-router.get('/:id/reviews', getReviews);
+router.get('/:id/addReview', getReviews);
   
 // add a review to a specific restaurant
-router.post('/:id/reviews', addReview);
+router.post('/:id/addReview', addReview);
   
 // delete a review
-router.delete('/reviews/:id', deleteReview);
+router.delete('/addReview/:id', deleteReview);
   
 module.exports = router;

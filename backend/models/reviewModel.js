@@ -1,7 +1,7 @@
+// reviewModel.js
 const mongoose = require('mongoose');
 
-const reviewSchema = mongoose.Schema(
-  {
+const reviewSchema = mongoose.Schema({
     name: {
       type: String,
       required: [true, "Please enter your name"],
